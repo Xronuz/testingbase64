@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 interface Todo {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
   createdAt: Date;
@@ -25,7 +25,7 @@ function TodoApp() {
 
   const [inputValue, setInputValue] = useState("");
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
-  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function TodoApp() {
     setTodos([
       ...todos,
       {
-        id: Date.now(),
+        id: crypto.randomUUID(),
         text: trimmed,
         completed: false,
         createdAt: new Date(),
@@ -47,11 +47,11 @@ function TodoApp() {
     setInputValue("");
   };
 
-  const deleteTodo = (id: number) => {
+  const deleteTodo = (id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const toggleTodo = (id: number) => {
+  const toggleTodo = (id: string) => {
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -59,15 +59,16 @@ function TodoApp() {
     );
   };
 
-  const startEditing = (id: number, text: string) => {
+  const startEditing = (id: string, text: string) => {
     setIsEditing(id);
     setEditText(text);
   };
 
-  const saveEdit = (id: number) => {
+  const saveEdit = (id: string) => {
     const trimmed = editText.trim();
     if (!trimmed) {
-      deleteTodo(id);
+      setIsEditing(null);
+      setEditText("");
       return;
     }
     setTodos(

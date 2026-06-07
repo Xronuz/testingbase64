@@ -1,7 +1,12 @@
+import ErrorBoundary from "./components/ErrorBoundary";
 import TodoApp from "./components/TodoApp";
 
 function App() {
-  return <TodoApp />;
+  return (
+    <ErrorBoundary>
+      <TodoApp />
+    </ErrorBoundary>
+  );
 }
 
 export default App;
